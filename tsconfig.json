@@ -8,7 +8,7 @@
     "sourceMap": true,
     "noUncheckedIndexedAccess": true,
     "moduleDetection": "force",
-    "types": ["jest", "node"]
+    "types": ["jest", "node", "multer"]
   },
   "include": ["src/**/*", "tests/**/*"]
 }
