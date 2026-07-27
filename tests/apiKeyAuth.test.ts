@@ -28,4 +28,15 @@ describe("apiKeyAuth", () => {
     expect(response.status).toBe(200);
     expect(response.body.ok).toBe(true);
   });
+
+  it("rejects every request, even with no key sent, if API_KEY is unconfigured", async () => {
+    const originalKey = env.API_KEY;
+    env.API_KEY = "";
+    try {
+      const response = await request(app).get("/protected");
+      expect(response.status).toBe(401);
+    } finally {
+      env.API_KEY = originalKey;
+    }
+  });
 });
