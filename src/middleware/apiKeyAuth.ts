@@ -6,6 +6,10 @@ export function apiKeyAuth(req: Request, res: Response, next: NextFunction) {
   const provided = req.header("x-api-key") ?? "";
   const expected = env.API_KEY;
 
+  if (!expected) {
+    return res.status(401).json({ error: "Invalid API key" });
+  }
+
   const a = Buffer.from(provided);
   const b = Buffer.from(expected);
 
