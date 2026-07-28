@@ -9,4 +9,6 @@ export const env = {
   AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY ?? "",
   AWS_REGION: process.env.AWS_REGION ?? "",
   S3_BUCKET: process.env.S3_BUCKET ?? "",
+  OPENAI_API_KEY: process.env.OPENAI_API_KEY ?? "",
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY ?? ""
 };
