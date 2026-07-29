@@ -1,6 +1,6 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document, Types } from "mongoose";
 export interface INutritionPlan extends Document {
-patientId: Schema.Types.ObjectId;
+patientId: Types.ObjectId;
 extractedHistory: Record<string, unknown>;
 summary: string;
 foodsToAvoid: Record<string, unknown>[];
