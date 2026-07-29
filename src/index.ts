@@ -3,14 +3,18 @@ import mongoose from "mongoose";
 import { env } from "./config/env";
 import { errorHandler } from "./middleware/errorHandler";
 import medicalHistoryRoutes from "./routes/medicalHistory.routes";
+import nutritionRoutes from "./routes/nutrition.routes";
 
 const app = express();
+
+app.use(express.json());
 
 app.get("/health", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
 app.use("/medical-history", medicalHistoryRoutes);
+app.use("/nutrition", nutritionRoutes);
 
 app.use(errorHandler);
 
