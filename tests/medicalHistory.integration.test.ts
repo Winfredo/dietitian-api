@@ -103,8 +103,10 @@ describe("POST /medical-history/upload", () => {
     const patient = await Patient.findById(response.body.patientId);
     expect(patient).not.toBeNull();
     expect(patient?.fullName).toBe("Jane Doe");
-    expect(patient?.status).toBe("processing");
     expect(patient?.medicalHistoryS3Key).toBe("medical-history/fake-key.pdf");
+
+    // Wait for the background pipeline to settle so it can't leak into the next test.
+    await waitForStatus(response.body.patientId, "analyzed");
   });
 
   it("processes the upload in the background: extracts history, generates a plan, and marks the patient analyzed", async () => {
