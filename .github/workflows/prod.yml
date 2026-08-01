@@ -7,6 +7,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      API_KEY: ci-test-key
+      AWS_REGION: eu-west-1
+      S3_BUCKET: test-bucket-not-real
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -15,7 +19,3 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm test
-        env:
-          API_KEY: ${{ secrets.TEST_API_KEY }}
-          AWS_REGION: eu-west-1
-          S3_BUCKET: test-bucket-not-real
