@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import mongoose from "mongoose";
 import { env } from "./config/env";
 import { errorHandler } from "./middleware/errorHandler";
@@ -6,6 +7,13 @@ import medicalHistoryRoutes from "./routes/medicalHistory.routes";
 import nutritionRoutes from "./routes/nutrition.routes";
 
 const app = express();
+
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://d1qwbnlcdfjl6r.cloudfront.net",
+  ],
+}));
 
 app.use(express.json());
 
