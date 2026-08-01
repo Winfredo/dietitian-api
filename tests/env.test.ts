@@ -22,6 +22,7 @@ describe("env config", () => {
     delete process.env.S3_BUCKET;
     delete process.env.OPENAI_API_KEY;
     delete process.env.GEMINI_API_KEY;
+    delete process.env.CORS_ORIGIN;
 
     const { env } = require("../src/config/env");
 
@@ -35,6 +36,7 @@ describe("env config", () => {
       S3_BUCKET: "",
       OPENAI_API_KEY: "",
       GEMINI_API_KEY: "",
+      CORS_ORIGIN: "",
     });
   });
 
