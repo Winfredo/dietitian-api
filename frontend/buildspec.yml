@@ -4,10 +4,11 @@ phases:
     runtime-versions:
       nodejs: 20
     commands:
-      - cd frontend && npm ci
+      - cd frontend
+      - npm ci
   build:
     commands:
-      - cd frontend && npm run build
+      - npm run build
 artifacts:
   files:
     - '**/*'
