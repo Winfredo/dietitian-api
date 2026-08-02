@@ -79,7 +79,7 @@ function App() {
   return (
     <div className="app">
       <DisclaimerBanner />
-      <h1>AI Dietitian</h1>
+      <h1> Winfred AI Dietitian</h1>
 
       <IntakeForm onSubmit={handleSubmit} disabled={isBusy} />
 
