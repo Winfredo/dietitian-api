@@ -12,6 +12,7 @@ app.use(cors({
   origin: [
     "http://localhost:5173",
     "https://d1qwbnlcdfjl6r.cloudfront.net",
+    "https://d3k482r5xd9u4p.cloudfront.net",
   ],
 }));
 
