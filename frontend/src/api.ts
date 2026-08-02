@@ -2,7 +2,6 @@ import type { NutritionPlan, Patient } from "./types";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 const API_BASE_URL = "http://ai-dietitian-dev.eba-nhnktemu.eu-west-1.elasticbeanstalk.com";
-
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
