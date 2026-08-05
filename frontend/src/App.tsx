@@ -17,6 +17,46 @@ type Stage =
 const POLL_INTERVAL_MS = 2000;
 const MAX_POLL_ATTEMPTS = 30;
 
+const STEPS: { label: string }[] = [
+  { label: "Upload" },
+  { label: "Analyze" },
+  { label: "Your plan" },
+];
+
+function currentStepIndex(stage: Stage): number {
+  if (stage === "idle") return 0;
+  if (stage === "uploading" || stage === "processing") return 1;
+  return 2;
+}
+
+function Stepper({ stage }: { stage: Stage }) {
+  const activeIndex = currentStepIndex(stage);
+  const hasError = stage === "failed" || stage === "error";
+
+  return (
+    <ol className="stepper" aria-label="Progress">
+      {STEPS.map((step, index) => {
+        let status: "done" | "active" | "upcoming" = "upcoming";
+        if (index < activeIndex) status = "done";
+        else if (index === activeIndex) status = "active";
+        const isErrored = hasError && index === activeIndex;
+
+        return (
+          <li
+            key={step.label}
+            className={`stepper-item ${status}${isErrored ? " errored" : ""}`}
+          >
+            <span className="stepper-dot" aria-hidden="true">
+              {status === "done" && !isErrored ? "✓" : index + 1}
+            </span>
+            <span className="stepper-label">{step.label}</span>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
 function App() {
   const [stage, setStage] = useState<Stage>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -74,27 +114,96 @@ function App() {
     }
   }
 
+  function handleReset() {
+    setStage("idle");
+    setErrorMessage(null);
+    setPlan(null);
+  }
+
   const isBusy = stage === "uploading" || stage === "processing";
 
   return (
     <div className="app">
+      <header className="app-header">
+        <div className="brand">
+          <span className="brand-mark" aria-hidden="true">
+            🥗
+          </span>
+          <div>
+            <h1>AI Dietitian</h1>
+            <p className="brand-subtitle">
+              Personalized nutrition guidance from your medical history
+            </p>
+          </div>
+        </div>
+      </header>
+
       <DisclaimerBanner />
-      <h1> AI Dietitian</h1>
 
-      <IntakeForm onSubmit={handleSubmit} disabled={isBusy} />
+      <main className="app-main">
+        <div className="card intake-card">
+          <Stepper stage={stage} />
 
-      {stage === "processing" && (
-        <p className="status">Analyzing your document, this can take a bit...</p>
-      )}
-      {stage === "failed" && (
-        <p className="status status-error">
-          Analysis failed. Please try uploading again.
-        </p>
-      )}
-      {stage === "error" && (
-        <p className="status status-error">{errorMessage}</p>
-      )}
-      {stage === "analyzed" && plan && <PlanDisplay plan={plan} />}
+          {stage !== "analyzed" && (
+            <IntakeForm onSubmit={handleSubmit} disabled={isBusy} stage={stage} />
+          )}
+
+          {stage === "processing" && (
+            <div className="status status-processing" role="status">
+              <span className="spinner" aria-hidden="true" />
+              <div>
+                <p className="status-title">Analyzing your document</p>
+                <p className="status-detail">
+                  This usually takes under a minute. Hang tight…
+                </p>
+              </div>
+            </div>
+          )}
+
+          {stage === "failed" && (
+            <div className="status status-error" role="alert">
+              <span className="status-icon" aria-hidden="true">
+                ⚠️
+              </span>
+              <div>
+                <p className="status-title">Analysis failed</p>
+                <p className="status-detail">
+                  We couldn't process that file. Please try uploading again.
+                </p>
+              </div>
+              <button className="btn-ghost" type="button" onClick={handleReset}>
+                Try again
+              </button>
+            </div>
+          )}
+
+          {stage === "error" && (
+            <div className="status status-error" role="alert">
+              <span className="status-icon" aria-hidden="true">
+                ⚠️
+              </span>
+              <div>
+                <p className="status-title">Something went wrong</p>
+                <p className="status-detail">{errorMessage}</p>
+              </div>
+              <button className="btn-ghost" type="button" onClick={handleReset}>
+                Try again
+              </button>
+            </div>
+          )}
+        </div>
+
+        {stage === "analyzed" && plan && (
+          <>
+            <PlanDisplay plan={plan} />
+            <div className="reset-row">
+              <button className="btn-secondary" type="button" onClick={handleReset}>
+                Analyze another document
+              </button>
+            </div>
+          </>
+        )}
+      </main>
     </div>
   );
 }
