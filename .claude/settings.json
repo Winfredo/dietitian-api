@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(aws elasticbeanstalk *)",
+      "Bash(aws cloudfront *)",
+      "Bash(aws sts *)",
+      "Bash(aws configure *)",
+      "Bash(env)"
+    ]
+  }
+}
